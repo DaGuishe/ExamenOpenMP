@@ -1,0 +1,23 @@
+
+@page { size: letter; margin: 1.6cm 1.7cm; }
+body { font-family: 'DejaVu Serif', Georgia, serif; font-size: 9.6pt; line-height: 1.33;
+       color: #111; background: #fff; max-width: none; margin: 0; }
+header#title-block-header { text-align: center; margin-bottom: 4pt; }
+h1.title { font-size: 13.5pt; color: #7a0026; margin: 0; }
+p.subtitle { font-size: 11pt; margin: 2pt 0 0; color: #7a0026; }
+p.meta { text-align: center; font-size: 8.4pt; color: #444; margin: 2pt 0 6pt; }
+h2 { font-size: 11pt; color: #7a0026; border-bottom: 1px solid #c9a3ae; margin: 9pt 0 3pt; }
+p { margin: 2pt 0; text-align: justify; }
+li { margin: 1.5pt 0; text-align: left; }
+ol, ul { margin: 2pt 0; padding-left: 16pt; }
+code { font-size: 8.6pt; background: #f3f0f1; padding: 0 2px; }
+table { border-collapse: collapse; margin: 4pt auto; font-size: 8.6pt; }
+th, td { border-bottom: 1px solid #ccc; padding: 1.5pt 6pt; vertical-align: top; }
+th { border-bottom: 1.5px solid #7a0026; }
+.figura { text-align: center; }
+.figura img { width: 50%; }
+.pendiente { background: #fff3b0; }
+.anexo { page-break-before: always; }
+.anexo table { font-size: 7.6pt; }
+.anexo h1 { font-size: 13pt; color: #7a0026; }
+math { font-size: 105%; }
