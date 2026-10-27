@@ -18,7 +18,8 @@ Se generan `N` puntos aleatorios `(x, y)` en el cuadrado unitario `[0,1)²`. La 
 | `verificar.sh` | Comprueba que la versión paralela da el mismo `dentro` que la secuencial para varios `p`. |
 | `benchmark.sh` | Mide T1 y Tp (mediana de R repeticiones) y calcula speedup y eficiencia. |
 | `graficar.py` | Genera `resultados/speedup_eficiencia.png` a partir de `resultados/resumen.csv`. |
-| `BITACORA_IA.md` | Bitácora del uso de IA en el examen. |
+| `PARTE_III_4.md` | Respuesta a la pregunta III.4 (proyección a 64 núcleos, p vs. N). |
+| `BITACORA_IA.md` | Bitácora del uso de IA (anexo del informe). |
 | `resultados/` | Mediciones (`tiempos.csv`), resumen (`resumen.csv`) y gráfica. |
 
 Ambas usan el **mismo generador pseudoaleatorio** (tipo SplitMix64), donde cada número depende solo del índice de la iteración y de la semilla. Por eso:
