@@ -1,3 +1,10 @@
+# Binarios
+montecarlo
 montecarlo_secuencial
-montecarlo_paralelo
+montecarlo_docente
+defectos
+montecarlo_splitmix_*
+tests/test_generador
 *.o
+__pycache__/
+informe/*.html

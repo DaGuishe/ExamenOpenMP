@@ -1,54 +1,87 @@
 /*
- * Estimación de pi por Monte Carlo - versión secuencial (línea base).
+ * montecarlo_secuencial.c -- version secuencial de referencia (linea base T(1)).
  *
- * Usa EXACTAMENTE el mismo generador que la versión paralela, de modo que
- * con la misma semilla y el mismo N ambos programas dan el mismo "dentro".
+ * Es el programa del enunciado (referencia/montecarlo_docente.c) con tres
+ * agregados que no cambian el calculo:
+ *   - validacion de argumentos y semilla configurable;
+ *   - medicion del tiempo del ciclo con omp_get_wtime() (por eso se compila
+ *     con -fopenmp, aunque no tiene ninguna directiva paralela);
+ *   - una linea "RESULTADO ..." con el numero de aciertos para los scripts.
  *
- * Uso: ./montecarlo_secuencial [N] [semilla]
+ * Usa rand_r de la biblioteca C con un unico estado, exactamente como el
+ * docente: para la misma semilla y el mismo N produce el mismo "dentro" que
+ * montecarlo.c con cualquier numero de hilos.
+ *
+ * Compilar: gcc -O2 -fopenmp montecarlo_secuencial.c -o montecarlo_secuencial -lm
+ * Uso:      ./montecarlo_secuencial [N] [semilla]
  */
+#include <errno.h>
+#include <limits.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include <time.h>
+#include <omp.h>
 
-#define SEMILLA_DEFECTO 20261018ULL /* CAMBIAR por la semilla que te asignó el docente */
+#define N_DEFECTO       100000000LL
+#define SEMILLA_DEFECTO 20261018u   /* semilla base asignada por el docente */
+/* Mismo limite que montecarlo.c: 6N pasos del LCG de rand_r deben caber en
+   su periodo de 2^32 para que ninguna muestra repita la secuencia. */
+#define N_MAXIMO        715827882LL
 
-/* Devuelve un número aleatorio en [0,1) que depende solo de k y de la semilla */
-static double aleatorio(uint64_t semilla, uint64_t k) {
-    uint64_t z = semilla + k * 0x9E3779B97F4A7C15ULL;
-    z = (z ^ (z >> 30)) * 0xBF58476D1CE4E5B9ULL;
-    z = (z ^ (z >> 27)) * 0x94D049BB133111EBULL;
-    z = z ^ (z >> 31);
-    return (z >> 11) * (1.0 / 9007199254740992.0);
+/* Convierte un texto a entero con signo verificando que sea un numero completo. */
+static int leer_entero(const char *texto, long long *valor) {
+    char *fin;
+    errno = 0;
+    long long v = strtoll(texto, &fin, 10);
+    if (errno != 0 || fin == texto || *fin != '\0')
+        return 0;
+    *valor = v;
+    return 1;
 }
 
-static double ahora(void) {
-    struct timespec ts;
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    return ts.tv_sec + ts.tv_nsec * 1e-9;
+static void uso(const char *programa) {
+    fprintf(stderr,
+            "Uso: %s [N] [semilla]\n"
+            "  N        numero de muestras, 1 <= N <= %lld (defecto %lld)\n"
+            "  semilla  entero entre 0 y %u (defecto %u)\n",
+            programa, N_MAXIMO, N_DEFECTO, UINT_MAX, SEMILLA_DEFECTO);
 }
 
 int main(int argc, char *argv[]) {
-    long N = (argc > 1) ? atol(argv[1]) : 100000000L;
-    uint64_t semilla = (argc > 2) ? strtoull(argv[2], NULL, 10) : SEMILLA_DEFECTO;
+    long long N = N_DEFECTO, s = SEMILLA_DEFECTO;
 
-    if (N <= 0) {
-        fprintf(stderr, "Uso: %s [N>0] [semilla]\n", argv[0]);
+    if (argc > 3) {
+        fprintf(stderr, "Error: demasiados argumentos.\n");
+        uso(argv[0]);
+        return 1;
+    }
+    if (argc > 1 && (!leer_entero(argv[1], &N) || N < 1 || N > N_MAXIMO)) {
+        fprintf(stderr, "Error: N invalido '%s'.\n", argv[1]);
+        uso(argv[0]);
+        return 1;
+    }
+    if (argc > 2 && (!leer_entero(argv[2], &s) || s < 0 || s > UINT_MAX)) {
+        fprintf(stderr, "Error: semilla invalida '%s'.\n", argv[2]);
+        uso(argv[0]);
         return 1;
     }
 
-    long dentro = 0;
-    double t0 = ahora();
+    unsigned int estado = (unsigned int)s;   /* semilla del generador */
+    long long dentro = 0;
 
-    for (long i = 0; i < N; i++) {
-        double x = aleatorio(semilla, 2 * (uint64_t)i);
-        double y = aleatorio(semilla, 2 * (uint64_t)i + 1);
-        if (x * x + y * y <= 1.0)
+    double t0 = omp_get_wtime();
+    for (long long i = 0; i < N; i++) {
+        double x = rand_r(&estado) / (double)RAND_MAX;
+        double y = rand_r(&estado) / (double)RAND_MAX;
+        if (x*x + y*y <= 1.0)
             dentro++;
     }
+    double t = omp_get_wtime() - t0;
 
-    double t = ahora() - t0;
-    printf("p=1 N=%ld pi=%.6f dentro=%ld tiempo=%.4f s\n",
-           N, 4.0 * dentro / (double)N, dentro, t);
+    double pi = 4.0 * (double)dentro / (double)N;
+    printf("Estimacion de pi: %.6f\n", pi);
+    printf("RESULTADO version=secuencial p=1 schedule=- N=%lld semilla=%lld "
+           "dentro=%lld pi=%.10f error=%.3e tiempo=%.6f\n",
+           N, s, dentro, pi, fabs(pi - M_PI), t);
     return 0;
 }
