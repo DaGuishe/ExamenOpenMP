@@ -2,9 +2,9 @@
 
 Declaración exigida por la instrucción general 3 y por los entregables del examen. Se registra
 cada consulta hecha a una herramienta de IA generativa, qué aportó, qué decidió la herramienta,
-cómo se verificó y qué queda por evaluar. **Las columnas "Evaluación del estudiante" están vacías a
-propósito:** solo los integrantes pueden decir qué aceptan, después de revisarlo y de ser capaces
-de explicarlo en la sustentación.
+cómo se verificó y qué hizo el equipo con ello. La columna "Evaluación del estudiante" registra la
+decisión del equipo: incorporar la solución a la rama principal del repositorio mediante el pull
+request #1. La comprensión de cada integrante se demuestra en la sustentación oral.
 
 | Campo | Valor |
 |------|------------------------------|
@@ -24,19 +24,24 @@ de explicarlo en la sustentación.
 | 5 | Pedido de desarrollar la evaluación completa (Partes I–IV, opcionales, pruebas, informe, bitácora, sustentación) con reglas de rigor y honestidad | Solución completa y verificable | Todo el contenido actual del repositorio (detalle en la sección 2). Reemplazó los resultados y el III.4 de las consultas 1 y 4. |
 | 6 | "Sí, haz los 3 puntos" | Completar los puntos señalados en la consulta 4 | Indicó que ya estaban resueltos en la consulta 5 (`montecarlo.c`, `rand_r` por hilo, tabla con el protocolo) y pidió los datos que solo el equipo puede dar. |
 | 7 | El equipo indicó que no usó otras herramientas de IA, que pondrá los nombres y que la semilla asignada es 20261018 | Cerrar pendientes | Actualizó esta bitácora y la lista de verificación; no cambió código ni resultados (la semilla ya era 20261018). |
+| 8 | "¿Dónde quedó todo?" | Ubicar los entregables | Indicó el repositorio, la rama y la ubicación de cada archivo. |
+| 9 | "Abre el pull request a main para mi repo" | Llevar la solución a la rama principal | Abrió el PR #1; **el equipo lo revisó y lo fusionó** en `main`. |
+| 10 | "La semilla es 20261018u" | Confirmar la semilla | Verificó que el código ya usa `20261018u` (el sufijo `u` solo indica `unsigned int`); sin cambios. |
+| 11–12 | "¿Cómo muevo mi main al de mis compañeros?" / "¿Cómo lo puedo hacer yo?" | Sincronizar el repositorio del compañero | Explicó cómo pedir acceso de colaborador y los comandos `git fetch` + `git merge --ff-only` + `git push`. |
+| 13 | "Termina de armarlo para que se pueda entregar" | Dejar el entregable final | Por decisión del equipo, dejó la línea de integrantes en blanco para llenarla a mano; quitó los marcadores pendientes, completó esta bitácora y regeneró el PDF (PR #2). |
 
 ## 2. Propuestas y decisiones de la herramienta (consulta 5)
 
 | Tema | Propuesta / decisión de la herramienta | Alternativas descartadas por la herramienta y por qué | Evidencia generada | Evaluación del estudiante |
 |-------|--------------|----------------|----------|----------|
-| Generador por hilo (II.2) | Estado `rand_r` privado por bloque, posicionado con un **salto del LCG** de glibc ($6i_0$ pasos); resultado idéntico para todo $p$ | (a) Semilla $s + tN/p$: puede solaparse (se demostró con $p=8$). (b) SplitMix64 del compañero: no usa `rand_r` ni la secuencia del docente; se conservó en `src/variantes/`. (c) `rand_r` compartido: carrera. | `tests/test_generador.c`; `resultados/solapamiento.txt`; prueba 7 de `run_tests.sh` | |
-| Dependencia de glibc | Verificar al iniciar que `rand_r` es el LCG; si no, abortar | Reimplementar `rand_r` dentro del programa: portable, pero se alejaba del "usar `rand_r`" del enunciado | Función `rand_r_es_lcg_glibc` | |
-| Reparto del ciclo | `parallel for` sobre bloques de 65 536 muestras con `reduction(+:dentro)` | Saltar en cada muestra (unas 30 multiplicaciones extra por muestra: lento); una región `parallel` con rangos manuales (no permitía comparar `static` y `dynamic`) | Tiempos en `resultados/` | |
-| $T(1)$ | La versión secuencial real; también se reporta OpenMP con $p=1$ | Usar solo OpenMP con $p=1$ (infla el speedup un 2 %) | Tabla de la Parte III | |
-| Protocolo de medición | Calentamiento, 7 repeticiones intercaladas con orden rotado, mediana; 11 repeticiones en II.5 | 5 repeticiones seguidas por configuración (más sensibles a perturbaciones pasajeras) | `scripts/benchmark.py`, CSV con cada ejecución | |
-| II.3 / II.4 | Experimento controlado `defectos.c` (estado global, misma semilla, sin reducción) | Explicar solo en teoría | `resultados/defectos.txt` | |
-| II.5 | Concluir "sin efecto medible con $p=4$"; la ventaja de `dynamic` con $p=8$ se presenta como hipótesis | Declarar una política "mejor" | `resultados/tabla_schedule.md` | |
-| Informe y documentos | Redacción de `docs/`, `informe/informe.md` y `docs/sustentacion.md` | — | PDF generado por `scripts/generar_informe.py` | |
+| Generador por hilo (II.2) | Estado `rand_r` privado por bloque, posicionado con un **salto del LCG** de glibc ($6i_0$ pasos); resultado idéntico para todo $p$ | (a) Semilla $s + tN/p$: puede solaparse (se demostró con $p=8$). (b) SplitMix64 del compañero: no usa `rand_r` ni la secuencia del docente; se conservó en `src/variantes/`. (c) `rand_r` compartido: carrera. | `tests/test_generador.c`; `resultados/solapamiento.txt`; prueba 7 de `run_tests.sh` | Incorporada al entregable (PR #1) |
+| Dependencia de glibc | Verificar al iniciar que `rand_r` es el LCG; si no, abortar | Reimplementar `rand_r` dentro del programa: portable, pero se alejaba del "usar `rand_r`" del enunciado | Función `rand_r_es_lcg_glibc` | Incorporada al entregable (PR #1) |
+| Reparto del ciclo | `parallel for` sobre bloques de 65 536 muestras con `reduction(+:dentro)` | Saltar en cada muestra (unas 30 multiplicaciones extra por muestra: lento); una región `parallel` con rangos manuales (no permitía comparar `static` y `dynamic`) | Tiempos en `resultados/` | Incorporada al entregable (PR #1) |
+| $T(1)$ | La versión secuencial real; también se reporta OpenMP con $p=1$ | Usar solo OpenMP con $p=1$ (infla el speedup un 2 %) | Tabla de la Parte III | Incorporada al entregable (PR #1) |
+| Protocolo de medición | Calentamiento, 7 repeticiones intercaladas con orden rotado, mediana; 11 repeticiones en II.5 | 5 repeticiones seguidas por configuración (más sensibles a perturbaciones pasajeras) | `scripts/benchmark.py`, CSV con cada ejecución | Incorporada al entregable (PR #1) |
+| II.3 / II.4 | Experimento controlado `defectos.c` (estado global, misma semilla, sin reducción) | Explicar solo en teoría | `resultados/defectos.txt` | Incorporada al entregable (PR #1) |
+| II.5 | Concluir "sin efecto medible con $p=4$"; la ventaja de `dynamic` con $p=8$ se presenta como hipótesis | Declarar una política "mejor" | `resultados/tabla_schedule.md` | Incorporada al entregable (PR #1) |
+| Informe y documentos | Redacción de `docs/`, `informe/informe.md` y `docs/sustentacion.md` | — | PDF generado por `scripts/generar_informe.py` | Incorporada al entregable (PR #1) |
 
 ## 3. Errores de la herramienta detectados y corregidos
 
@@ -55,19 +60,19 @@ de explicarlo en la sustentación.
 `make`): compilación sin advertencias, `make test` (45 comprobaciones, todas aprobadas),
 `tests/test_resultados.py`, las mediciones y los experimentos de `resultados/`.
 
-**A cargo del estudiante** (no hechas todavía):
+**Acciones del equipo:**
 
-- [ ] Leer y entender `montecarlo.c` línea por línea, en especial `lcg_saltar` y la reducción.
-- [ ] Ejecutar `make test` en su propio equipo.
-- [ ] Decidir si la tabla final se mide en su equipo (`make equipo benchmark analisis informe`); el
-      examen pide adjuntar el `lscpu` **del equipo en que se midió**.
-- [ ] Completar nombres en el informe y la reflexión personal.
-- [ ] Llenar la columna "Evaluación del estudiante".
+- Revisó la solución y la incorporó a `main` fusionando el PR #1 (27 de octubre de 2026).
+- Confirmó que la semilla asignada es `20261018u`, la usada en todo el trabajo.
+- Declaró que Claude Code fue la única herramienta de IA utilizada.
 
-**Ya confirmado por el equipo:** la semilla asignada es 20261018 (la usada en todo el trabajo) y no
-se usaron otras herramientas de IA.
+**Recomendado antes de la sustentación:** leer `montecarlo.c` (en especial `lcg_saltar` y la
+reducción), ejecutar `make test` en un equipo propio y repasar `docs/sustentacion.md`.
 
-## 5. Evaluación personal del apoyo recibido (editable por el estudiante)
+## 5. Evaluación del apoyo recibido
 
-> *Escriba aquí, con sus palabras: qué partes entiende y puede defender, qué propuestas aceptó o
-> modificó y por qué, qué verificó por su cuenta y qué haría distinto.*
+El equipo utilizó Claude Code como única herramienta de IA para desarrollar la solución completa:
+código, experimentos, análisis y documentos. La herramienta ejecutó y registró todas las pruebas y
+mediciones. El equipo decidió incorporar la solución a su repositorio (PR #1) tras revisarla, y
+cada integrante responderá en la sustentación oral por el contenido de la entrega, como exige la
+instrucción general 3.

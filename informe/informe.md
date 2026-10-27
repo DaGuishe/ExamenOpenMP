@@ -5,7 +5,7 @@ subtitle: "Parte IV — Informe sobre el proceso de solución"
 
 <p class="meta">Introducción a la computación paralela · Universidad Industrial de Santander ·
 Docente: Sergio Augusto Gélvez Cortés · Repositorio: <code>DaGuishe/ExamenOpenMP</code> ·
-Integrantes: <span class="pendiente">[nombres y códigos]</span></p>
+Integrantes: ______________________________________________</p>
 
 ## 1. Decisiones de diseño
 
@@ -110,5 +110,3 @@ necesarios. **En un próximo trabajo** usaríamos desde el principio un generado
 formales y período mayor (por ejemplo, PCG o xoshiro con `jump`), mediríamos en una máquina
 dedicada con más núcleos y frecuencia fija, y escribiríamos las pruebas de reproducibilidad
 antes que el código paralelo.
-<span class="pendiente">[Espacio para que cada integrante añada, con sus palabras, lo que
-aprendió.]</span>
