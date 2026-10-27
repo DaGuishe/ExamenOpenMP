@@ -81,7 +81,8 @@ def tabla_speedup():
     sep = "|" + "---:|" * (reps + 6)
     lineas = [enc, sep]
     for s in salida:
-        etiqueta = "1 (secuencial, T(1))" if s["p"] == "sec" else str(s["p"])
+        etiqueta = ("1 (secuencial, T(1))" if s["p"] == "sec" else
+                    "1 (OpenMP)" if s["p"] == 1 else str(s["p"]))
         lineas.append(f"| {etiqueta} | " + " | ".join(fmt(t) for t in s["tiempos"]) +
                       f" | **{fmt(s['mediana'])}** | {fmt(s['S'], 3)} | {fmt(s['E'], 3)} | "
                       f"{fmt(s['pi'], 8)} | {fmt(s['error'] * 1e5, 2)}·10⁻⁵ |")
@@ -177,7 +178,10 @@ def main():
                  "escalado_N": {str(k): {"f": k * t_par / (t_s + k * t_par),
                                          "S64": amdahl(k * t_par / (t_s + k * t_par), 64)}
                                 for k in (1, 10, 100)}},
-        "III5_gustafson_64": (1 - f_est) + f_est * 64,
+        # Gustafson: alfa = fraccion serial del tiempo de la ejecucion PARALELA (p=4)
+        "III5": {"alfa": t_s / por_p[4]["mediana"],
+                 "S_gustafson_64": (t_s / por_p[4]["mediana"]) +
+                 64 * (1 - t_s / por_p[4]["mediana"])},
         "schedule": sched,
     }
     with open(os.path.join(RES, "analisis.json"), "w") as f:
