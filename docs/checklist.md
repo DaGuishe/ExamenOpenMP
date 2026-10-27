@@ -8,7 +8,7 @@ confirmar · ⏳ pendiente (depende de los integrantes).
 | Requisito | Estado | Dónde / evidencia |
 |---|---|---|
 | Respuestas en español, justificadas | ✅ | `docs/parte_I.md`, `docs/parte_II.md`, `docs/parte_III.md`, `informe/respuestas.pdf` |
-| Bitácora de IA (herramienta, propósito, qué se aceptó o descartó y por qué) | ⚠️ | `bitacora_ia.md` y anexo de `informe/informe.pdf`. Única herramienta: Claude Code (confirmado). La columna "Evaluación del estudiante" y la sección 5 deben llenarlas los integrantes. |
+| Bitácora de IA (herramienta, propósito, qué se aceptó o descartó y por qué) | ✅ | `bitacora_ia.md` y anexo de `informe/informe.pdf`. Única herramienta: Claude Code; solución incorporada por el equipo (PR #1). |
 | Poder explicar y defender todo | ⏳ | Guía en `docs/sustentacion.md` |
 
 ## Parte I (15 %)
@@ -49,7 +49,7 @@ confirmar · ⏳ pendiente (depende de los integrantes).
 
 | Requisito | Estado | Dónde |
 |---|---|---|
-| Informe de 1 a 2 páginas: decisiones, problemas, validación, datos concretos, reflexión | ⚠️ | `informe/informe.pdf` (2 páginas + anexo). Faltan los **nombres y códigos** y la reflexión personal (marcados en amarillo). |
+| Informe de 1 a 2 páginas: decisiones, problemas, validación, datos concretos, reflexión | ✅ | `informe/informe.pdf` (2 páginas + anexo). La línea de **integrantes** está en blanco para llenarla a mano. |
 
 ## Entregables
 
@@ -59,12 +59,11 @@ confirmar · ⏳ pendiente (depende de los integrantes).
 | Repositorio Git con commits descriptivos | ✅ | `DaGuishe/ExamenOpenMP`, rama `claude/merge-repos-finish-exam-cckfce` |
 | Respuestas de las Partes I y III | ✅ | `informe/respuestas.pdf` (incluye la II) |
 | Tabla + `lscpu` + gráfica de $S(p)$ con la recta ideal | ⚠️ | `resultados/tabla_speedup.md`, `resultados/equipo.txt`, `resultados/speedup.png`. Se midió en una **VM en la nube**, no en el equipo de los integrantes: si el docente espera su equipo, ejecutar `make equipo benchmark schedule analisis informe test-resultados` y revisar los textos con los nuevos números. |
-| Informe PDF con la bitácora como anexo | ⚠️ | `informe/informe.pdf` (ver Parte IV) |
+| Informe PDF con la bitácora como anexo | ✅ | `informe/informe.pdf` |
 
 ## Pendientes y limitaciones
 
-1. **Nombres e integrantes** en el informe (los ponen los integrantes); **reflexión personal**;
-   **evaluación de la bitácora**.
+1. **Integrantes:** escribir nombres y códigos en la línea en blanco del encabezado del informe.
 2. **Equipo de medición:** VM de 4 vCPU compartida; no fue posible medir con más de 4 núcleos ni
    fijar la frecuencia. Las hipótesis sobre frecuencia e hiperprocesamiento no se verificaron.
 3. **Portabilidad:** `montecarlo.c` requiere glibc (Linux). En macOS se niega a ejecutarse
