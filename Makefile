@@ -11,7 +11,7 @@ REPS    ?= 7
 HILOS   ?= 1 2 4 8
 SEMILLA ?= 20261018
 
-BINARIOS = montecarlo montecarlo_secuencial montecarlo_docente defectos tests/test_generador
+BINARIOS = montecarlo montecarlo_secuencial montecarlo_docente defectos solapamiento tests/test_generador
 
 all: $(BINARIOS)
 
@@ -26,6 +26,9 @@ montecarlo_docente: referencia/montecarlo_docente.c
 
 defectos: src/experimentos/defectos.c
 	$(CC) $(CFLAGS) $(OMP) $< -o $@ $(LDLIBS)
+
+solapamiento: src/experimentos/solapamiento.c
+	$(CC) $(CFLAGS) $< -o $@
 
 tests/test_generador: tests/test_generador.c montecarlo.c
 	$(CC) $(CFLAGS) $(OMP) $< -o $@ $(LDLIBS)
@@ -50,6 +53,10 @@ schedule: all
 defectos-exp: defectos
 	bash scripts/defectos.sh > resultados/defectos.txt
 
+# Parte II.2: solapamiento del esquema ingenuo "semilla + t*N/p" (tarda ~20 s)
+solapamiento-exp: solapamiento
+	./solapamiento $(N) $(SEMILLA) > resultados/solapamiento.txt
+
 # Tablas, graficas y calculos de Amdahl a partir de los CSV
 analisis:
 	python3 scripts/analisis.py
@@ -62,9 +69,9 @@ informe:
 test-resultados:
 	python3 tests/test_resultados.py
 
-todo: all test equipo benchmark schedule defectos-exp analisis informe test-resultados
+todo: all test equipo benchmark schedule defectos-exp solapamiento-exp analisis informe test-resultados
 
 clean:
 	rm -f $(BINARIOS)
 
-.PHONY: all test equipo benchmark schedule defectos-exp analisis informe test-resultados todo clean
+.PHONY: all test equipo benchmark schedule defectos-exp solapamiento-exp analisis informe test-resultados todo clean

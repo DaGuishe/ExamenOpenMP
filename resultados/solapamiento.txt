@@ -1,0 +1,13 @@
+p=2, N=100000000, tramo por hilo = 300000000 pasos del LCG
+  esquema ingenuo (semilla + t*N/p):
+  -> 0 solapamiento(s)
+  esquema con salto (montecarlo.c): 0 solapamiento(s)
+p=4, N=100000000, tramo por hilo = 150000000 pasos del LCG
+  esquema ingenuo (semilla + t*N/p):
+  -> 0 solapamiento(s)
+  esquema con salto (montecarlo.c): 0 solapamiento(s)
+p=8, N=100000000, tramo por hilo = 75000000 pasos del LCG
+  esquema ingenuo (semilla + t*N/p):
+    hilo 1 alcanza la semilla del hilo 0 tras 43927968 pasos (58.6% de su tramo): comparten 31072032 pasos
+  -> 1 solapamiento(s)
+  esquema con salto (montecarlo.c): 0 solapamiento(s)

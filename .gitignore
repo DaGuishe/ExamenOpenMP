@@ -3,6 +3,7 @@ montecarlo
 montecarlo_secuencial
 montecarlo_docente
 defectos
+solapamiento
 montecarlo_splitmix_*
 tests/test_generador
 *.o
