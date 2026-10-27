@@ -1,0 +1,15 @@
+{
+  "modo": "speedup",
+  "N": 100000000,
+  "repeticiones": 7,
+  "hilos": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "semilla": 20261018,
+  "calentamiento": "1 ejecucion por configuracion",
+  "orden": "intercalado y rotado por ronda",
+  "fecha": "2026-10-27T19:55:48"
+}
