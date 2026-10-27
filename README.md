@@ -1,155 +1,122 @@
-# Montecarlo con OpenMP
+# Integración por Monte Carlo en memoria compartida con OpenMP
 
-Estimación de π con el método de Monte Carlo, en versión secuencial y paralela (OpenMP).
+Evaluación de *Introducción a la computación paralela* (UIS). Estimación de $\pi$ por acierto y
+fallo, en versión secuencial y paralela con OpenMP, con análisis de speedup y de la ley de Amdahl.
 
-Se generan `N` puntos aleatorios `(x, y)` en el cuadrado unitario `[0,1)²`. La fracción de puntos que cae dentro del cuarto de círculo (`x² + y² ≤ 1`) aproxima π/4, por lo tanto:
+**Idea central:** `rand_r` de glibc es un generador congruencial lineal de período $2^{32}$, así
+que la semilla es una *posición* en un único ciclo. Cada bloque de muestras crea un estado
+`rand_r` **privado** saltando ($O(\log k)$) a su posición exacta. Los flujos de los hilos son
+tramos disjuntos y el resultado es **idéntico** para cualquier número de hilos, e idéntico al
+programa del docente.
 
-```
-π ≈ 4 · dentro / N
-```
+## Entregables
 
-## Archivos
-
-| Archivo | Descripción |
+| Qué | Dónde |
 |---|---|
-| `montecarlo_secuencial.c` | Versión secuencial (línea base para medir el speedup). |
-| `montecarlo_paralelo.c` | Versión paralela con OpenMP (`parallel for` + `reduction`). |
-| `Makefile` | Compila ambas versiones (`make`) y lanza verificación, benchmark y gráficas. |
-| `verificar.sh` | Comprueba que la versión paralela da el mismo `dentro` que la secuencial para varios `p`. |
-| `benchmark.sh` | Mide T1 y Tp (mediana de R repeticiones) y calcula speedup y eficiencia. |
-| `graficar.py` | Genera `resultados/speedup_eficiencia.png` a partir de `resultados/resumen.csv`. |
-| `PARTE_III_4.md` | Respuesta a la pregunta III.4 (proyección a 64 núcleos, p vs. N). |
-| `BITACORA_IA.md` | Bitácora del uso de IA (anexo del informe). |
-| `resultados/` | Mediciones (`tiempos.csv`), resumen (`resumen.csv`) y gráfica. |
+| Programa paralelo | [`montecarlo.c`](montecarlo.c) |
+| Versión secuencial de referencia | [`montecarlo_secuencial.c`](montecarlo_secuencial.c) · copia literal del enunciado en [`referencia/`](referencia/montecarlo_docente.c) |
+| Informe de la Parte IV (PDF, 2 páginas + bitácora de IA como anexo) | [`informe/informe.pdf`](informe/informe.pdf) · fuente [`informe/informe.md`](informe/informe.md) |
+| Respuestas de las Partes I, II y III (PDF) | [`informe/respuestas.pdf`](informe/respuestas.pdf) · fuentes en [`docs/`](docs/) |
+| Tabla de la Parte III | [`resultados/tabla_speedup.md`](resultados/tabla_speedup.md) (y `.csv`) |
+| Gráfica $S(p)$ con la recta ideal | [`resultados/speedup.png`](resultados/speedup.png) |
+| Datos del equipo (`lscpu`, gcc, memoria) | [`resultados/equipo.txt`](resultados/equipo.txt) |
+| Bitácora de IA | [`bitacora_ia.md`](bitacora_ia.md) |
+| Guía para la sustentación | [`docs/sustentacion.md`](docs/sustentacion.md) |
+| Lista de verificación y pendientes | [`docs/checklist.md`](docs/checklist.md) |
 
-Ambas usan el **mismo generador pseudoaleatorio** (tipo SplitMix64), donde cada número depende solo del índice de la iteración y de la semilla. Por eso:
+## Estructura
 
-- El resultado **no depende del número de hilos** (`p`).
-- Con la misma semilla y el mismo `N`, la versión secuencial y la paralela dan exactamente el mismo valor de `dentro`, lo que permite validar la paralelización.
+```
+montecarlo.c                 versión paralela (entregable)
+montecarlo_secuencial.c      línea base T(1)
+referencia/                  programa del docente, sin cambios
+src/experimentos/            defectos.c (II.3/II.4), solapamiento.c (II.2)
+src/variantes/               versión anterior con SplitMix64 (diseño original del compañero)
+scripts/                     benchmark.py, analisis.py, generar_informe.py, info_equipo.sh, defectos.sh
+tests/                       run_tests.sh, test_generador.c, test_resultados.py
+resultados/                  CSV con cada ejecución, tablas, gráfica, salidas de experimentos
+docs/                        respuestas, sustentación, checklist
+informe/                     informe.pdf, respuestas.pdf y fuentes
+```
 
 ## Requisitos
 
-- `gcc` con soporte OpenMP (en Linux ya viene incluido; en macOS: `brew install gcc` y usar `gcc-14` o similar en lugar de `gcc`).
+Linux con glibc, `gcc` con OpenMP y `make`. Para los análisis: Python 3 con `matplotlib`. Para
+los PDF: `pandoc`, `pdfinfo`/`pdftotext` (poppler) y Node.js con `playwright` (Chromium).
+`montecarlo.c` verifica al iniciar que `rand_r` es el de glibc y, si no lo es (por ejemplo, en
+macOS), se niega a ejecutarse.
 
-## Compilar
-
-```bash
-make            # compila ambas versiones
-```
-
-O a mano:
+## Compilar y ejecutar
 
 ```bash
-gcc -O2 -o montecarlo_secuencial montecarlo_secuencial.c
-gcc -O2 -fopenmp -o montecarlo_paralelo montecarlo_paralelo.c
-```
+# Comando exigido por el enunciado
+gcc -O2 -fopenmp montecarlo.c -o montecarlo -lm
+gcc -O2 -fopenmp montecarlo_secuencial.c -o montecarlo_secuencial -lm
 
-## Ejecutar
+# O todo junto (con -Wall -Wextra)
+make
 
-```bash
 ./montecarlo_secuencial [N] [semilla]
-./montecarlo_paralelo   [N] [p] [semilla]
-```
+./montecarlo [N] [p] [semilla] [static|dynamic]
 
-| Parámetro | Significado | Valor por defecto |
-|---|---|---|
-| `N` | Número de puntos | `100000000` |
-| `p` | Número de hilos (solo paralelo) | `1` |
-| `semilla` | Semilla del generador | `20261018` |
-
-Ejemplos:
-
-```bash
-# Secuencial con 100 millones de puntos
 ./montecarlo_secuencial 100000000
-
-# Paralelo con 4 hilos
-./montecarlo_paralelo 100000000 4
-
-# Barrido de hilos para calcular speedup
-for p in 1 2 4 8; do ./montecarlo_paralelo 100000000 $p; done
+./montecarlo 100000000 4
+OMP_NUM_THREADS=8 ./montecarlo 100000000
 ```
 
-Salida de ejemplo:
+| Parámetro | Rango | Defecto |
+|---|---|---|
+| `N` | 1 … 715 827 882 ($6N \le 2^{32}$) | 100 000 000 |
+| `p` | 1 … 1024 | `OMP_NUM_THREADS` |
+| `semilla` | 0 … 4 294 967 295 | 20261018 |
+| política | `static` / `dynamic` | `static` |
+
+Salida:
 
 ```
-p=4 N=100000000 pi=3.141241 dentro=78531024 tiempo=0.2164 s
+Estimacion de pi: 3.141633
+RESULTADO version=paralela p=4 schedule=static N=100000000 semilla=20261018 dentro=78540833 pi=3.1416333200 error=4.070e-05 tiempo=0.225300
 ```
 
-## Speedup y eficiencia
-
-Con `T1` = tiempo de la versión secuencial y `Tp` = tiempo con `p` hilos:
-
-```
-Speedup    S(p) = T1 / Tp
-Eficiencia E(p) = S(p) / p
-```
-
-Para resultados fiables, repite cada medición varias veces y usa la mediana. Procura no tener otros programas pesados abiertos y no uses más hilos que núcleos físicos disponibles (`nproc`).
-
-## Reproducir el experimento
+## Reproducir todo
 
 ```bash
-make verificar                              # secuencial == paralelo para p = 1,2,3,4,8,16
-./benchmark.sh 500000000 7                  # N = 5·10⁸, mediana de 7 repeticiones
-python3 graficar.py                         # requiere matplotlib (pip install matplotlib)
+make test               # 45 pruebas de corrección (~10 s)
+make equipo             # resultados/equipo.txt
+make benchmark          # Parte III: N=1e8, p=1,2,4,8, 7 repeticiones (~30 s)
+make schedule REPS=11   # II.5: static vs dynamic
+make defectos-exp       # II.3/II.4: experimento de defectos
+make solapamiento-exp   # II.2: solapamiento del esquema ingenuo (~20 s)
+make analisis           # tablas, gráfica y cálculos de Amdahl
+make informe            # informe/informe.pdf e informe/respuestas.pdf
+make test-resultados    # verifica CSV, cálculos, gráfica, PDF y coherencia de docs
+make todo               # todo lo anterior en orden
 ```
 
-`benchmark.sh` acepta `[N] [R] [semilla] ["lista de hilos"]`; por defecto prueba `p = 1 … nproc` y `2·nproc`.
+Variables: `make benchmark N=100000000 REPS=7 HILOS="1 2 4 8" SEMILLA=20261018`.
 
-## Resultados
+> Si se vuelve a medir, los números cambian y los textos de `docs/` y del informe deben
+> actualizarse. `make test-resultados` avisa si las medianas citadas en los documentos ya no
+> coinciden con los CSV.
 
-**Entorno:** Intel Xeon @ 2.10 GHz, 4 núcleos físicos (1 hilo por núcleo), Linux, `gcc 13.3 -O2 -fopenmp`.
-**Parámetros:** `N = 500 000 000` puntos, semilla `20261018`, mediana de 7 repeticiones.
+## Resultados (VM KVM, Intel Xeon 2,1 GHz, 4 núcleos, gcc 13.3)
 
-### Validación
+$N = 10^8$, mediana de 7 ejecuciones; $\hat\pi = 3{,}14163332$ en todas (error $4{,}07\cdot10^{-5}$).
 
-Todas las ejecuciones (secuencial y paralelas con cualquier `p`) dieron exactamente
-`dentro = 392 677 373` → **π ≈ 3.141419**. El error absoluto es ≈ 1.7·10⁻⁴, unas 2.3 veces
-el error estándar del estimador (4·√(q(1−q)/N) ≈ 7.3·10⁻⁵ con q = π/4), coherente con la
-convergencia O(1/√N) de Monte Carlo. La paralelización no altera el resultado.
-
-### Tiempos, speedup y eficiencia
-
-T1 (secuencial) = **1.5564 s**
-
-| p | Tp (s) | Speedup S(p) | Eficiencia E(p) |
+| $p$ | Mediana $T(p)$ [s] | $S(p)$ | $E(p)$ |
 |---:|---:|---:|---:|
-| 1 | 1.5747 | 0.99 | 0.99 |
-| 2 | 0.7864 | 1.98 | 0.99 |
-| 3 | 0.5486 | 2.84 | 0.95 |
-| 4 | 0.4150 | 3.75 | 0.94 |
-| 8 | 0.4149 | 3.75 | 0.47 |
+| 1 (secuencial) | 0,8735 | 1,000 | 1,000 |
+| 1 (OpenMP) | 0,8908 | 0,981 | 0,981 |
+| 2 | 0,4408 | 1,982 | 0,991 |
+| 4 | 0,2253 | 3,877 | 0,969 |
+| 8 | 0,2338 | 3,735 | 0,467 |
 
-![Speedup y eficiencia](resultados/speedup_eficiencia.png)
+$f = 0{,}9895$ (de $S(4)$); $S(64) \approx 38{,}5$ con Amdahl y $61{,}4$ con Gustafson. Con 8
+hilos no hay mejora porque la máquina tiene 4 núcleos. Análisis completo en
+[`docs/parte_III.md`](docs/parte_III.md).
 
-### Análisis
+## Autoría y uso de IA
 
-- **Escalabilidad casi lineal hasta el número de núcleos.** Con 4 hilos se obtiene S ≈ 3.75
-  (E ≈ 94 %). El problema es *embarrassingly parallel*: cada iteración es independiente,
-  no hay estado compartido (el generador depende solo de `i` y de la semilla) y la única
-  sincronización es la `reduction(+:dentro)` final, que cuesta O(p).
-- **Overhead con p = 1.** La versión paralela con 1 hilo es ~1 % más lenta que la secuencial
-  por la creación del equipo de hilos y la reducción; es despreciable frente a N = 5·10⁸.
-- **Pérdida de eficiencia de 2 → 4 hilos (99 % → 94 %).** Se debe a factores del sistema
-  (otros procesos compitiendo por los núcleos, frecuencia de reloj compartida, desbalance
-  pequeño al repartir en bloques con `schedule(static)` por defecto), no al algoritmo.
-- **Sobresuscripción (p = 8 > 4 núcleos).** El tiempo no mejora (0.415 s ≈ p = 4): solo hay
-  4 núcleos, así que los hilos extra se turnan en ellos y la eficiencia cae a la mitad.
-  Conviene no usar más hilos que núcleos físicos (`nproc`).
-- **Ley de Amdahl.** La fracción secuencial (lectura de argumentos, reducción, `printf`) es
-  prácticamente nula, por lo que el límite de speedup viene dado por el hardware (número de
-  núcleos) y no por la parte serial del programa.
-
-### Conclusión
-
-La paralelización con `#pragma omp parallel for reduction(+:dentro)` es correcta (mismo
-resultado que la versión secuencial para cualquier número de hilos) y eficiente: alcanza un
-speedup de 3.75 con 4 núcleos (94 % de eficiencia). Más hilos que núcleos no aportan mejora.
-
-> Los tiempos dependen de la máquina. Para el informe, vuelve a ejecutar `./benchmark.sh`
-> en tu equipo y actualiza esta sección con tus valores.
-
-## Semilla
-
-La semilla por defecto está definida en `SEMILLA_DEFECTO` dentro de cada `.c`. Cámbiala por la que te asignó el docente, o pásala por línea de comandos como último argumento.
+El repositorio combina el trabajo de los dos integrantes (`DaGuishe/ExamenOpenMP` y
+`Anderzz0n/Montecarlo_con_Openmp`, cuyo historial se conserva). La solución actual fue
+desarrollada con Claude Code; el detalle está en [`bitacora_ia.md`](bitacora_ia.md).
