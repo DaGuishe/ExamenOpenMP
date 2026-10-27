@@ -8,7 +8,7 @@ confirmar · ⏳ pendiente (depende de los integrantes).
 | Requisito | Estado | Dónde / evidencia |
 |---|---|---|
 | Respuestas en español, justificadas | ✅ | `docs/parte_I.md`, `docs/parte_II.md`, `docs/parte_III.md`, `informe/respuestas.pdf` |
-| Bitácora de IA (herramienta, propósito, qué se aceptó o descartó y por qué) | ⚠️ | `bitacora_ia.md` y anexo de `informe/informe.pdf`. La columna "Evaluación del estudiante" y la sección 5 deben llenarlas los integrantes. |
+| Bitácora de IA (herramienta, propósito, qué se aceptó o descartó y por qué) | ⚠️ | `bitacora_ia.md` y anexo de `informe/informe.pdf`. Única herramienta: Claude Code (confirmado). La columna "Evaluación del estudiante" y la sección 5 deben llenarlas los integrantes. |
 | Poder explicar y defender todo | ⏳ | Guía en `docs/sustentacion.md` |
 
 ## Parte I (15 %)
@@ -28,7 +28,7 @@ confirmar · ⏳ pendiente (depende de los integrantes).
 | II.2 Elegir $p$ | ✅ | 2.º argumento / `OMP_NUM_THREADS` |
 | II.2 Flujo por hilo independiente y sin solapamiento, semilla base, espaciado $\ge N/p$ | ✅ | Salto del LCG de `rand_r`; `tests/test_generador.c`; `resultados/solapamiento.txt` |
 | II.2 Reproducible para cualquier $p$ | ✅ | Igualdad exacta para $p=1,2,3,4,8,16$, `static` y `dynamic` y 3 semillas (prueba 7) |
-| II.2 Semilla asignada por el docente | ⚠️ | Se usó 20261018 (la del enunciado). **Confirmar** si el docente asignó otra y cambiar `SEMILLA_DEFECTO` o pasarla como 3.er argumento. |
+| II.2 Semilla asignada por el docente | ✅ | 20261018, confirmada por el equipo; es la usada en todas las mediciones. |
 | II.3 Carrera sobre el estado y correlación con la misma semilla, con consecuencias | ✅ | `docs/parte_II.md` + `resultados/defectos.txt` |
 | II.4 Atributos de datos, cláusula del acumulador, efecto sin ella | ✅ | `docs/parte_II.md` + `resultados/defectos.txt` |
 | II.5 (opcional) static frente a dynamic con mediciones | ✅ | `resultados/tabla_schedule.md`, `docs/parte_II.md` |
@@ -63,12 +63,12 @@ confirmar · ⏳ pendiente (depende de los integrantes).
 
 ## Pendientes y limitaciones
 
-1. **Nombres e integrantes** en el informe; **reflexión personal**; **evaluación de la bitácora**.
-2. **Semilla** asignada por el docente (se usó la del enunciado).
-3. **Equipo de medición:** VM de 4 vCPU compartida; no fue posible medir con más de 4 núcleos ni
+1. **Nombres e integrantes** en el informe (los ponen los integrantes); **reflexión personal**;
+   **evaluación de la bitácora**.
+2. **Equipo de medición:** VM de 4 vCPU compartida; no fue posible medir con más de 4 núcleos ni
    fijar la frecuencia. Las hipótesis sobre frecuencia e hiperprocesamiento no se verificaron.
-4. **Portabilidad:** `montecarlo.c` requiere glibc (Linux). En macOS se niega a ejecutarse
+3. **Portabilidad:** `montecarlo.c` requiere glibc (Linux). En macOS se niega a ejecutarse
    (verificación de `rand_r`).
-5. El repositorio del compañero (`Anderzz0n/Montecarlo_con_Openmp`) no se actualizó: la
+4. El repositorio del compañero (`Anderzz0n/Montecarlo_con_Openmp`) no se actualizó: la
    herramienta no tiene permiso de escritura. Todo el trabajo está en `DaGuishe/ExamenOpenMP`.
-6. El PDF del enunciado no se incluyó en el repositorio (es material del docente).
+5. El PDF del enunciado no se incluyó en el repositorio (es material del docente).

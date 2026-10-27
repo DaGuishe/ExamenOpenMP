@@ -8,7 +8,7 @@ de explicarlo en la sustentación.
 
 | Campo | Valor |
 |------|------------------------------|
-| Herramienta | Claude Code (Anthropic), agente de programación en una sesión en la nube con acceso al repositorio |
+| Herramienta | Claude Code (Anthropic), agente de programación en una sesión en la nube con acceso al repositorio. **Fue la única herramienta de IA usada** en el examen (declarado por el equipo). |
 | Fecha | 27 de octubre de 2026 (una sola sesión) |
 | Usuario | Integrante dueño de `DaGuishe/ExamenOpenMP` |
 | Alcance | La herramienta leyó el enunciado (PDF), escribió código, ejecutó compilaciones, pruebas y mediciones, redactó documentos e hizo commits |
@@ -22,6 +22,8 @@ de explicarlo en la sustentación.
 | 3 | "Ya solo falta el III.4 y la bitácora de IA, ¿ya está hecho?" | Completar dos puntos | Respondió que no estaban hechos; redactó una bitácora y pidió el enunciado del III.4. |
 | 4 | Se adjuntó el PDF del examen | Dar el enunciado | Leyó las 5 páginas, resolvió el III.4 con los datos de la versión SplitMix64 y señaló diferencias con los entregables (nombre `montecarlo.c`, uso de `rand_r`, protocolo de la tabla). |
 | 5 | Pedido de desarrollar la evaluación completa (Partes I–IV, opcionales, pruebas, informe, bitácora, sustentación) con reglas de rigor y honestidad | Solución completa y verificable | Todo el contenido actual del repositorio (detalle en la sección 2). Reemplazó los resultados y el III.4 de las consultas 1 y 4. |
+| 6 | "Sí, haz los 3 puntos" | Completar los puntos señalados en la consulta 4 | Indicó que ya estaban resueltos en la consulta 5 (`montecarlo.c`, `rand_r` por hilo, tabla con el protocolo) y pidió los datos que solo el equipo puede dar. |
+| 7 | El equipo indicó que no usó otras herramientas de IA, que pondrá los nombres y que la semilla asignada es 20261018 | Cerrar pendientes | Actualizó esta bitácora y la lista de verificación; no cambió código ni resultados (la semilla ya era 20261018). |
 
 ## 2. Propuestas y decisiones de la herramienta (consulta 5)
 
@@ -59,10 +61,11 @@ de explicarlo en la sustentación.
 - [ ] Ejecutar `make test` en su propio equipo.
 - [ ] Decidir si la tabla final se mide en su equipo (`make equipo benchmark analisis informe`); el
       examen pide adjuntar el `lscpu` **del equipo en que se midió**.
-- [ ] Confirmar la semilla asignada por el docente (se usó 20261018, la del enunciado).
 - [ ] Completar nombres en el informe y la reflexión personal.
-- [ ] Llenar la columna "Evaluación del estudiante" y agregar cualquier otra herramienta de IA
-      que se haya usado (ChatGPT, Copilot, etc.).
+- [ ] Llenar la columna "Evaluación del estudiante".
+
+**Ya confirmado por el equipo:** la semilla asignada es 20261018 (la usada en todo el trabajo) y no
+se usaron otras herramientas de IA.
 
 ## 5. Evaluación personal del apoyo recibido (editable por el estudiante)
 
