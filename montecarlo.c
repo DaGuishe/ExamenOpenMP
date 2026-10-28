@@ -51,12 +51,30 @@ static unsigned int avanzar_lcg(unsigned int s, unsigned long long k) {
 }
 
 int main(int argc, char *argv[]) {
-    long N = (argc > 1) ? atol(argv[1]) : 100000000L;
-    if (argc > 2) omp_set_num_threads(atoi(argv[2]));
+    char *fin_arg;
+    long N = 100000000L;
+    if (argc > 1) {
+        N = strtol(argv[1], &fin_arg, 10);
+        if (*fin_arg != '\0') {
+            fprintf(stderr, "N debe ser un entero, por ejemplo 100000000\n");
+            return 1;
+        }
+    }
+    if (argc > 2) {
+        long hilos = strtol(argv[2], &fin_arg, 10);
+        if (*fin_arg != '\0' || hilos < 1) {
+            fprintf(stderr, "el numero de hilos debe ser un entero mayor o igual a 1\n");
+            return 1;
+        }
+        omp_set_num_threads((int)hilos);
+    }
     unsigned int semilla = (argc > 3) ? (unsigned int)strtoul(argv[3], NULL, 10) : SEMILLA_BASE;
     if (argc > 4 && strcmp(argv[4], "dynamic") == 0)
         omp_set_schedule(omp_sched_dynamic, 1);
-    else
+    else if (argc > 4 && strcmp(argv[4], "static") != 0) {
+        fprintf(stderr, "el plan debe ser static o dynamic\n");
+        return 1;
+    } else
         omp_set_schedule(omp_sched_static, 0);
 
     if (N <= 0 || (unsigned long long)N * PASOS_MUESTRA > 4294967296ULL) {

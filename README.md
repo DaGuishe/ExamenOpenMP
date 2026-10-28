@@ -33,16 +33,16 @@ cambia es el tiempo:
 
 | Hilos | Tiempo, mediana de 7 | Veces más rápido |
 |:-:|:-:|:-:|
-| 1 | 0,545 s | 1,0× |
-| 2 | 0,276 s | 2,0× |
-| 4 | 0,143 s | 3,8× |
-| 8 | 0,079 s | 6,9× |
-| 10 | 0,067 s | 8,1× |
+| 1 | 0,545 s | 1,00× |
+| 2 | 0,276 s | 1,97× |
+| 4 | 0,143 s | 3,80× |
+| 8 | 0,079 s | 6,87× |
+| 10 | 0,067 s | 8,09× |
 
 Medido en un MacBook Air con chip Apple M5, que tiene 4 núcleos de alto rendimiento y 6 de
-eficiencia, con macOS 26.5, clang 21 y libomp 23, funcionando con batería. Hasta 4 hilos el
-speedup es casi ideal. Desde el quinto hilo entran los núcleos de eficiencia, que rinden cerca de
-0,7 de un núcleo rápido, y por eso con 8 hilos se llega a 6,9 y no a 8. La fracción paralelizable
+eficiencia, con macOS 26.5, clang 21 y libomp 23, sin cargador. Hasta 4 hilos el
+speedup es casi ideal. Desde el quinto hilo entran los núcleos de eficiencia, que son más lentos y
+suman cerca de 0,7 al speedup cada uno. Por eso con 8 hilos se llega a 6,87 y no a 8. La fracción paralelizable
 que sale de la ley de Amdahl es f = 0,983.
 
 ## Cómo ejecutarlo
@@ -69,6 +69,9 @@ El rand_r de macOS no es el mismo de Linux. Por eso el programa trae `rand_r_gli
 exacta del algoritmo de glibc, y da los mismos números en los dos sistemas.
 
 ## Reproducir las mediciones
+
+Estos scripts están hechos para macOS con Homebrew. Ojo que `bench.py` reemplaza
+`resultados/tiempos.csv` con las nuevas mediciones.
 
 ```bash
 ./experimentos/compilar.sh          # compila todo en bin/
