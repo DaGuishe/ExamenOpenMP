@@ -1,0 +1,12 @@
+caso                      mediana      min      max    S(p)    E(p)
+secuencial                 0.5451   0.5445   0.5464   1.000   1.000
+paralelo p=1 static        0.5448   0.5446   0.5458   1.001   1.001
+paralelo p=2 static        0.2762   0.2754   0.2766   1.974   0.987
+paralelo p=4 static        0.1433   0.1428   0.1454   3.804   0.951
+paralelo p=8 static        0.0794   0.0783   0.0804   6.865   0.858
+paralelo p=10 static       0.0674   0.0658   0.0691   8.088   0.809
+paralelo p=4 dynamic       0.1430   0.1429   0.1470
+paralelo p=8 dynamic       0.0784   0.0782   0.1066
+paralelo p=10 dynamic      0.0657   0.0651   0.0793
+conteos distintos en 63 corridas: {'78541825'}
+f = 0.983   Karp-Flatt e(2)=0.013 e(4)=0.017 e(8)=0.024 e(10)=0.026

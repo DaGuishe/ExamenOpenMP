@@ -1,0 +1,8 @@
+hilos=1 N=1000000 dentro=785771 pi=3.143084 error=1.49e-03 tiempo=0.0074 s
+hilos=10 N=1000000 dentro=785771 pi=3.143084 error=1.49e-03 tiempo=0.0034 s
+hilos=1 N=10000000 dentro=7852981 pi=3.141192 error=4.00e-04 tiempo=0.0707 s
+hilos=10 N=10000000 dentro=7852981 pi=3.141192 error=4.00e-04 tiempo=0.0071 s
+hilos=1 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.5450 s
+hilos=10 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.0667 s
+hilos=1 N=400000000 dentro=314158865 pi=3.141589 error=4.00e-06 tiempo=2.1823 s
+hilos=10 N=400000000 dentro=314158865 pi=3.141589 error=4.00e-06 tiempo=0.2709 s

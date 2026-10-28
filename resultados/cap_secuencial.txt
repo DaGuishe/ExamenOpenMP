@@ -1,0 +1,2 @@
+$ ./bin_secuencial 100000000
+secuencial N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.5449 s

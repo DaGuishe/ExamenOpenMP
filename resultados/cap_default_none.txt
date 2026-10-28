@@ -1,0 +1,12 @@
+$ clang -fopenmp -fsyntax-only default_none.c
+default_none.c:9:31: error: variable 'semilla' must have explicitly specified data sharing attributes
+default_none.c:8:26: error: variable 'nbloques' must have explicitly specified data sharing attributes
+default_none.c:10:40: error: variable 'N' must have explicitly specified data sharing attributes
+$ ./bin_defectos 4 8
+modo=4 hilos=8 N=100000000 dentro=9820954 pi=0.392838 error=2.75e+00 tiempo=0.1127 s
+$ ./bin_defectos 4 8
+modo=4 hilos=8 N=100000000 dentro=9820551 pi=0.392822 error=2.75e+00 tiempo=0.1126 s
+$ ./bin_defectos 4 8
+modo=4 hilos=8 N=100000000 dentro=9821328 pi=0.392853 error=2.75e+00 tiempo=0.1120 s
+$ ./bin_defectos 4 1
+modo=4 hilos=1 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.7547 s

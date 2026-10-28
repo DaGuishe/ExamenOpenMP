@@ -1,0 +1,50 @@
+hilos=4 plan=static dentro=78541825 total=0.1427
+  hilo 0: 100 bloques, termino en 0.1426 s
+  hilo 1: 100 bloques, termino en 0.1426 s
+  hilo 2: 100 bloques, termino en 0.1426 s
+  hilo 3: 100 bloques, termino en 0.1427 s
+hilos=4 plan=dynamic dentro=78541825 total=0.1438
+  hilo 0: 100 bloques, termino en 0.1429 s
+  hilo 1: 100 bloques, termino en 0.1438 s
+  hilo 2: 100 bloques, termino en 0.1427 s
+  hilo 3: 100 bloques, termino en 0.1431 s
+hilos=8 plan=static dentro=78541825 total=0.0797
+  hilo 0: 50 bloques, termino en 0.0789 s
+  hilo 1: 50 bloques, termino en 0.0771 s
+  hilo 2: 50 bloques, termino en 0.0779 s
+  hilo 3: 50 bloques, termino en 0.0758 s
+  hilo 4: 50 bloques, termino en 0.0762 s
+  hilo 5: 50 bloques, termino en 0.0776 s
+  hilo 6: 50 bloques, termino en 0.0779 s
+  hilo 7: 50 bloques, termino en 0.0796 s
+hilos=8 plan=dynamic dentro=78541825 total=0.0785
+  hilo 0: 51 bloques, termino en 0.0781 s
+  hilo 1: 49 bloques, termino en 0.0776 s
+  hilo 2: 50 bloques, termino en 0.0773 s
+  hilo 3: 51 bloques, termino en 0.0772 s
+  hilo 4: 51 bloques, termino en 0.0773 s
+  hilo 5: 49 bloques, termino en 0.0770 s
+  hilo 6: 50 bloques, termino en 0.0782 s
+  hilo 7: 49 bloques, termino en 0.0784 s
+hilos=10 plan=static dentro=78541825 total=0.0674
+  hilo 0: 40 bloques, termino en 0.0661 s
+  hilo 1: 40 bloques, termino en 0.0653 s
+  hilo 2: 40 bloques, termino en 0.0666 s
+  hilo 3: 40 bloques, termino en 0.0631 s
+  hilo 4: 40 bloques, termino en 0.0642 s
+  hilo 5: 40 bloques, termino en 0.0660 s
+  hilo 6: 40 bloques, termino en 0.0671 s
+  hilo 7: 40 bloques, termino en 0.0673 s
+  hilo 8: 40 bloques, termino en 0.0649 s
+  hilo 9: 40 bloques, termino en 0.0629 s
+hilos=10 plan=dynamic dentro=78541825 total=0.0649
+  hilo 0: 39 bloques, termino en 0.0638 s
+  hilo 1: 41 bloques, termino en 0.0647 s
+  hilo 2: 40 bloques, termino en 0.0649 s
+  hilo 3: 42 bloques, termino en 0.0644 s
+  hilo 4: 40 bloques, termino en 0.0643 s
+  hilo 5: 38 bloques, termino en 0.0646 s
+  hilo 6: 41 bloques, termino en 0.0649 s
+  hilo 7: 39 bloques, termino en 0.0635 s
+  hilo 8: 41 bloques, termino en 0.0642 s
+  hilo 9: 39 bloques, termino en 0.0634 s

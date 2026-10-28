@@ -1,0 +1,46 @@
+Fecha: 2026-10-27 20:24
+== Equipo
+2026-10-27 20:24:24.183 system_profiler[68316:15124034] hw.cpufamily: 0x1d5a87e8
+Hardware:
+
+    Hardware Overview:
+
+      Model Name: MacBook Air
+      Model Identifier: Mac17,3
+      Model Number: MDHH4E/A
+      Chip: Apple M5
+      Total Number of Cores: 10 (4 Super and 6 Efficiency)
+      Memory: 16 GB
+      System Firmware Version: 18000.121.3
+      OS Loader Version: 18000.121.3
+
+== macOS
+ProductName:		macOS
+ProductVersion:		26.5.2
+BuildVersion:		25F84
+== Nucleos (equivalente a lscpu en macOS)
+hw.ncpu: 10
+hw.physicalcpu: 10
+hw.logicalcpu: 10
+hw.nperflevels: 2
+hw.perflevel0.name: Super
+hw.perflevel0.physicalcpu: 4
+hw.perflevel0.logicalcpu: 4
+hw.perflevel0.l1dcachesize: 131072
+hw.perflevel0.l2cachesize: 16777216
+hw.perflevel1.name: Efficiency
+hw.perflevel1.physicalcpu: 6
+hw.perflevel1.logicalcpu: 6
+hw.perflevel1.l1dcachesize: 65536
+hw.perflevel1.l2cachesize: 6291456
+hw.cachelinesize: 128
+hw.memsize: 17179869184
+machdep.cpu.brand_string: Apple M5
+== Compiladores
+Apple clang version 21.0.0 (clang-2100.1.1.101)
+gcc-16 (Homebrew GCC 16.2.0) 16.2.0
+libomp libomp 23.1.4
+== Energia
+Now drawing from 'Battery Power'
+ -InternalBattery-0 (id=22478947)	83%; discharging; 8:40 remaining present: true
+ lowpowermode         0

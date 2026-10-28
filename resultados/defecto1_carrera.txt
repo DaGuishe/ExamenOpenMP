@@ -1,0 +1,6 @@
+modo=1 hilos=1 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.6078 s
+modo=1 hilos=1 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.5768 s
+modo=1 hilos=1 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.5785 s
+modo=1 hilos=8 N=100000000 dentro=78537419 pi=3.141497 error=9.59e-05 tiempo=0.1093 s
+modo=1 hilos=8 N=100000000 dentro=78544358 pi=3.141774 error=1.82e-04 tiempo=0.1089 s
+modo=1 hilos=8 N=100000000 dentro=78539113 pi=3.141565 error=2.81e-05 tiempo=0.1083 s

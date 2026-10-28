@@ -1,0 +1,7 @@
+$ ./bin_tramos
+tramo 1: puntos 0 a 24999999, estado inicial 2211853, aciertos 19637752
+tramo 2: puntos 25000000 a 49999999, estado inicial 2913319565, aciertos 19633631
+tramo 3: puntos 50000000 a 74999999, estado inicial 3863000333, aciertos 19633530
+tramo 4: puntos 75000000 a 99999999, estado inicial 66236301, aciertos 19636912
+suma de los 4 tramos = 78541825
+secuencial           = 78541825
