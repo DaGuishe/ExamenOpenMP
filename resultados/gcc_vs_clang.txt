@@ -1,0 +1,13 @@
+== gcc 16 frente a clang 21, N=1e8, tras una corrida de calentamiento
+gcc   hilos=1 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.7932 s
+clang hilos=1 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.5970 s
+gcc   hilos=8 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.1078 s
+clang hilos=8 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.0807 s
+gcc   hilos=1 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.7618 s
+clang hilos=1 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.5676 s
+gcc   hilos=8 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.1083 s
+clang hilos=8 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.0790 s
+gcc   hilos=1 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.7564 s
+clang hilos=1 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.5486 s
+gcc   hilos=8 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.1083 s
+clang hilos=8 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.0777 s

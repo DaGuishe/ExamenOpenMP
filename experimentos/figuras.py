@@ -78,9 +78,9 @@ for k in range(4):
     x = 0.3 + k * 2.45
     ax.add_patch(FancyBboxPatch((x, 1.25), 2.15, 1.75, boxstyle="round,pad=0.05", fc="#fff7ed", ec=NARANJA))
     ax.text(x + 1.07, 2.72, f"hilo {k}", ha="center", weight="bold", fontsize=9)
-    ax.text(x + 1.07, 2.2, "estado del generador", ha="center", fontsize=7.6)
-    ax.text(x + 1.07, 1.85, "b, i, fin, x, y", ha="center", fontsize=7.6)
-    ax.text(x + 1.07, 1.5, "dentro, copia propia", ha="center", fontsize=7.6, color=NARANJA)
+    ax.text(x + 1.07, 2.2, "estado del generador", ha="center", fontsize=8.6)
+    ax.text(x + 1.07, 1.85, "b, i, fin, x, y", ha="center", fontsize=8.6)
+    ax.text(x + 1.07, 1.5, "dentro, copia propia", ha="center", fontsize=8.6, color=NARANJA)
     ax.annotate("", xy=(5, 0.75), xytext=(x + 1.07, 1.2), arrowprops=dict(arrowstyle="->", color=GRIS))
 ax.add_patch(FancyBboxPatch((3.1, 0.15), 3.8, 0.55, boxstyle="round,pad=0.05", fc=AZUL, ec=AZUL))
 ax.text(5, 0.42, "reduction(+:dentro) suma una sola vez", ha="center", va="center", color="white", fontsize=8.6, weight="bold")
@@ -94,7 +94,7 @@ for k in range(4):
     ax.add_patch(Rectangle((k * 25, 1.3), 25, 1.0, fc=cols[k], ec="white", lw=2))
     ax.text(k * 25 + 12.5, 1.95, f"tramo {k+1}", ha="center", fontsize=8.5, weight="bold")
     ax.text(k * 25 + 12.5, 1.55, f"{tr[k]:,}".replace(",", "."), ha="center", fontsize=8.5)
-ax.text(0, 2.6, "punto 0", fontsize=7.5, color=GRIS); ax.text(100, 2.6, "punto 99.999.999", fontsize=7.5, color=GRIS, ha="right")
+ax.text(0, 2.6, "punto 0", fontsize=9, color=GRIS); ax.text(100, 2.6, "punto 99.999.999", fontsize=9, color=GRIS, ha="right")
 ax.text(50, 0.6, f"suma = {sum(tr):,}".replace(",", ".") + "  =  conteo secuencial", ha="center", fontsize=10, weight="bold", color=VERDE)
 guardar("f04_tramos")
 
@@ -104,15 +104,18 @@ for b in range(400):
     h = b // 100
     ax.add_patch(Rectangle((b, 1.3), 1, 0.9, fc=cols[h], ec="none"))
 for h in range(4):
-    ax.text(h * 100 + 50, 1.68, f"hilo {h}: bloques {h*100} a {h*100+99}", ha="center", fontsize=7.6, weight="bold")
-    ax.text(h * 100 + 50, 0.85, f"arranca en el valor {h*150},0 millones", ha="center", fontsize=7.2, color=GRIS)
+    ax.text(h * 100 + 50, 1.68, f"hilo {h}: bloques {h*100} a {h*100+99}", ha="center", fontsize=8.6, weight="bold")
+    ax.text(h * 100 + 50, 0.85, f"empieza en el paso {h*150} millones", ha="center", fontsize=8.4, color=GRIS)
 ax.text(200, 2.6, "una sola secuencia de rand_r que empieza en 2211853, cortada en 400 bloques de 250.000 puntos", ha="center", fontsize=8)
 ax.text(200, 0.25, "cada bloque salta a su posición con avanzar_lcg, sin importar qué hilo lo tome", ha="center", fontsize=8, color=VERDE)
 guardar("f07_bloques")
 
 # ---------- Figura: defectos
 fig, (a1, a2) = plt.subplots(1, 2, figsize=(6.8, 2.8))
-crit = {int(re.search(r"hilos=(\d+)", l).group(1)): float(re.search(r"tiempo=([\d.]+)", l).group(1)) for l in open("resultados/defecto2_critical.txt")}
+crit_l = collections.defaultdict(list)
+for l in open("resultados/defecto2_critical.txt"): crit_l[int(re.search(r"hilos=(\d+)", l).group(1))].append(float(re.search(r"tiempo=([\d.]+)", l).group(1)))
+crit = {k: st.median(v) for k, v in crit_l.items()}
+num["critical"] = crit
 a1.bar(["1 hilo", "8 hilos"], [crit[1], crit[8]], color=[VERDE, NARANJA])
 for i, v in enumerate([crit[1], crit[8]]): a1.text(i, v + 0.6, coma(v, 1) + " s", ha="center", fontsize=9)
 a1.set_title("Generador compartido con candado"); a1.set_ylabel("tiempo [s]")
@@ -186,7 +189,8 @@ fig, ax = plt.subplots(figsize=(6.2, 2.9))
 for i, (k, lab, c) in enumerate((("crear", "crear los hilos, primera región", VERDE), ("region", "región con hilos ya creados", AZUL), ("red", "costo extra de la reducción", NARANJA))):
     vals = [max(0, st.median(cst[p][k])) for p in hp]
     ax.bar([j + (i - 1) * w for j in range(len(hp))], vals, w, color=c, label=lab)
-    for j, v in enumerate(vals): ax.text(j + (i - 1) * w, v + 2, f"{v:.0f}", ha="center", fontsize=7)
+    for j, v in enumerate(vals):
+        if v >= 1: ax.text(j + (i - 1) * w, v + 2, f"{v:.0f}", ha="center", fontsize=7.5)
 ax.set_xticks(range(len(hp))); ax.set_xticklabels([f"{p} hilos" for p in hp]); ax.set_ylabel("microsegundos")
 ax.legend(fontsize=7.6); ax.set_title("Costos fijos de OpenMP, todos por debajo de 0,15 ms")
 num["costos"] = {p: {k: st.median(v) for k, v in cst[p].items()} for p in hp}

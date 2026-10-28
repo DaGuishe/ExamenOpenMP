@@ -1,0 +1,7 @@
+== advertencias con -Wall -Wextra (vacio = ninguna)
+$ clang -O2 -Wall -Wextra ... montecarlo.c
+$ gcc-16 -O2 -Wall -Wextra -fopenmp montecarlo.c
+== sin contraccion FMA
+hilos=8 N=100000000 dentro=78541825 pi=3.141673 error=8.03e-05 tiempo=0.0989 s
+== resolucion del reloj
+tick=9.53674e-07 wtick=1e-06
